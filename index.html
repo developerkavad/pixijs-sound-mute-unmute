@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <!--Include Lib For Pixijs-->
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.x/dist/pixi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <script>
+        //Now we are create app using pixijs
+        const app = new PIXI.Application({
+            "background": "#784558"
+        });
+        document.body.appendChild(app.view);
+        
+        const container = new PIXI.Container();
+        
+        app.stage.addChild(container);
+        
+        var sound = new Howl({
+            src: ['sound.mp3']
+        });
+        PIXI.Assets.load(["volumes.png"]).then((texture) => {
+            let isMute = false;
+            sound.play();
+            let volumeTexture = PIXI.utils.TextureCache["volumes.png"];
+            let textureOn = new PIXI.Texture(volumeTexture, new PIXI.Rectangle((volumeTexture.width / 2) * 0, 0, volumeTexture.width / 2, volumeTexture.height));
+            let textureOff = new PIXI.Texture(volumeTexture, new PIXI.Rectangle((volumeTexture.width / 2) * 1, 0, volumeTexture.width / 2, volumeTexture.height));
+            const soundUnMute = PIXI.Sprite.from(textureOn);
+            
+        
+            soundUnMute.interactive = true;
+            soundUnMute.cursor = 'pointer';
+           
+            soundUnMute.on("pointerdown", function () {
+                if (isMute == true) {
+                    isMute = false;
+                    sound.mute(false);
+                    this.texture = textureOn;
+                }
+                else {
+                    isMute = true;
+                    sound.mute(true);
+                    this.texture = textureOff;
+                }
+            });
+            container.addChild(soundUnMute)
+        });
+        
+        container.x = 100;
+        container.y = 100;
+       
+        
+    </script>
+</body>
+
+</html>
